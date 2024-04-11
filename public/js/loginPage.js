@@ -11,10 +11,15 @@ document.addEventListener("DOMContentLoaded", () => {
           email,
           password,
         });
+
         if (response.status === 200) {
+          console.log(response.data);
           alert("login successful: ", response.data.message);
         }
+
+        localStorage.setItem("token", response.data.token);
         window.location.href = "../views/homePage.html";
+
         document.getElementById("email").value = "";
         document.getElementById("password").value = "";
       } catch (error) {

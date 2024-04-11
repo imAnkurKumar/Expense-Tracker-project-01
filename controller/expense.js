@@ -7,7 +7,7 @@ exports.getHomePage = (req, res, next) => {
 
 exports.getAllExpenses = async (req, res, next) => {
   try {
-    const expenses = await Expense.findAll();
+    const expenses = await Expense.findAll({ where: { userId: req.user.id } });
     // console.log(expenses);
     res.json(expenses);
   } catch (error) {
@@ -24,6 +24,7 @@ exports.addExpense = async (req, res, next) => {
       amount: amount,
       description: description,
       category: category,
+      userId: req.user.id,
     });
     res.status(200).json({ message: "Expense added successfully" });
   } catch (error) {
@@ -35,7 +36,9 @@ exports.addExpense = async (req, res, next) => {
 exports.deleteExpense = async (req, res, next) => {
   const expenseId = req.params.id;
   try {
-    const expense = await Expense.findByPk(expenseId);
+    const expense = await Expense.findOne({
+      where: { id: expenseId, userId: req.user.id }, // Check both ID and userId
+    });
     if (!expense) {
       return res.status(404).json({ message: "Expense not found" });
     }
