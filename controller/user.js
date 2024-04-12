@@ -4,10 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 function generateAccessToken(id, email) {
-  return jwt.sign(
-    { userId: id, email: email },
-    "kjhsgdfiuiew889kbasgdfskjabsdfjlabsbdljhsd"
-  );
+  return jwt.sign({ userId: id, email: email }, process.env.TOKEN_SECRET);
 }
 
 exports.getSignUpPage = (req, res, next) => {
