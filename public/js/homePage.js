@@ -76,6 +76,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         const expenseItem = createExpenseItem(newExpense);
         expenseList.appendChild(expenseItem);
 
+        document.getElementById("amount").value = "";
+        document.getElementById("description").value = "";
+        document.getElementById("category").value = "Food";
         alert("Expense added successfully");
       }
     } catch (error) {

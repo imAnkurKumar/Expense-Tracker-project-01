@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       leaderboardContent.innerHTML = "";
       userLeaderboardAarray.data.forEach((userDetails) => {
         const listItem = document.createElement("li");
-        listItem.textContent = `Name : ${userDetails.name} - Total Expense : ${userDetails.total_cost}`;
+        listItem.textContent = `Name : ${userDetails.name} - Total Expense : ${userDetails.totalExpenses}`;
         leaderboardContent.appendChild(listItem);
       });
     } catch (error) {
