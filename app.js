@@ -9,6 +9,7 @@ const app = express();
 const userRouter = require("./router/user");
 const expenseRouter = require("./router/expense");
 const purchaseRouter = require("./router/purchaseMembership");
+const premiumFeatures = require("./router/premiumfeatures");
 
 const sequelize = require("./util/database");
 const User = require("./model/user");
@@ -18,14 +19,14 @@ const Order = require("./model/order");
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
 app.use(cors());
+
 app.use("/", userRouter);
 app.use("/user", userRouter);
-
 app.use("/", expenseRouter);
 app.use("/expense", expenseRouter);
 app.use("/purchase", purchaseRouter);
+app.use("/premium", premiumFeatures);
 
 User.hasMany(Expense);
 Expense.belongsTo(User);

@@ -3,19 +3,24 @@ const User = require("../model/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-function generateAccessToken(id, email) {
-  return jwt.sign({ userId: id, email: email }, process.env.TOKEN_SECRET);
+function generateAccessToken(id, email, isPremiumUser) {
+  return jwt.sign(
+    { userId: id, email: email, isPremiumUser },
+    process.env.TOKEN_SECRET
+  );
 }
 
-exports.getSignUpPage = (req, res, next) => {
+const getSignUpPage = (req, res, next) => {
   res.sendFile(path.join(__dirname, "../", "public", "views", "signUp.html"));
 };
-exports.getLoginPage = (req, res, next) => {
+
+const getLoginPage = (req, res, next) => {
   res.sendFile(
     path.join(__dirname, "../", "public", "views", "loginPage.html")
   );
 };
-exports.postUserSignUp = async (req, res, next) => {
+
+const postUserSignUp = async (req, res, next) => {
   const name = req.body.name;
   const email = req.body.email;
   const password = req.body.password;
@@ -43,7 +48,7 @@ exports.postUserSignUp = async (req, res, next) => {
   }
 };
 
-exports.postUserLogin = async (req, res, next) => {
+const postUserLogin = async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
 
@@ -57,10 +62,17 @@ exports.postUserLogin = async (req, res, next) => {
     if (!isPasswordValid) {
       return res.status(401).json({ message: "Invalid Password" });
     }
-    const token = generateAccessToken(user.id, user.email);
+    const token = generateAccessToken(user.id, user.email, user.isPremiumUser);
     res.status(200).json({ message: "Login Successful", token });
   } catch (error) {
     console.error("Login Error : ", error);
     res.status(500).json({ message: "server error" });
   }
+};
+module.exports = {
+  getSignUpPage,
+  getLoginPage,
+  postUserLogin,
+  postUserSignUp,
+  generateAccessToken,
 };
