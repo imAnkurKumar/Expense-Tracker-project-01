@@ -72,7 +72,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         { headers: { Authorization: token } }
       );
       if (response.status === 200) {
-        const newExpense = { amount, description, category };
+        const newExpense = {
+          amount,
+          description,
+          category,
+          id: response.data.expense.id,
+        };
         const expenseItem = createExpenseItem(newExpense);
         expenseList.appendChild(expenseItem);
 
