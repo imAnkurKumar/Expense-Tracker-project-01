@@ -12,8 +12,9 @@ document.addEventListener("DOMContentLoaded", () => {
           email: email,
         }
       );
-      if (response.status === 201) {
+      if (response.status === 200) {
         alert("Message: " + response.data.message);
+        document.getElementById("email").value = "";
       }
     } catch (err) {
       alert("Error: " + err.message);

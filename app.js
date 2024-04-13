@@ -10,12 +10,13 @@ const userRouter = require("./router/user");
 const expenseRouter = require("./router/expense");
 const purchaseRouter = require("./router/purchaseMembership");
 const premiumFeatures = require("./router/premiumfeatures");
-const forgotPassword = require("./router/resetPassword");
+const resetPassword = require("./router/resetPassword");
 
 const sequelize = require("./util/database");
 const User = require("./model/user");
 const Expense = require("./model/expense");
 const Order = require("./model/order");
+const ResetPassword = require("./model/resetPassword");
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -28,7 +29,7 @@ app.use("/", expenseRouter);
 app.use("/expense", expenseRouter);
 app.use("/purchase", purchaseRouter);
 app.use("/premium", premiumFeatures);
-app.use("/password", forgotPassword);
+app.use("/password", resetPassword);
 
 User.hasMany(Expense);
 Expense.belongsTo(User);
@@ -36,6 +37,8 @@ Expense.belongsTo(User);
 User.hasMany(Order);
 Order.belongsTo(User);
 
+User.hasMany(ResetPassword);
+ResetPassword.belongsTo(User);
 sequelize
   .sync()
   .then((result) => {
