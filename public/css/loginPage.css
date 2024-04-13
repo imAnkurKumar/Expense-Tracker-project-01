@@ -47,7 +47,21 @@ button {
   cursor: pointer;
   width: 100%;
 }
-
+.signup-link {
+  margin-top: 10px;
+  text-align: center;
+}
+.signup-link a {
+  color: #007bff;
+  text-decoration: none;
+}
+#forgot-password-link {
+  display: block;
+  margin-top: 5px;
+  text-align: center;
+  color: rgb((19, 6, 197) 7, 217);
+  text-decoration: solid;
+}
 @media screen and (max-width: 600px) {
   .container {
     max-width: 90%;
