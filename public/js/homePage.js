@@ -2,6 +2,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const expenseForm = document.getElementById("expense-form");
   const expenseList = document.getElementById("expense-list");
   const buyPremiumButton = document.getElementById("buy-premium-button");
+  const messageDiv = document.getElementById("message");
+  const downloadList = document.getElementById("download-list");
   let token;
 
   function parseJwt(token) {
@@ -24,6 +26,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     buyPremiumButton.style.visibility = "hidden";
     document.getElementById("message").innerHTML = "You are premium user";
     showLeaderboard();
+    showReport();
+    downloadExpense();
+    fetchDownloadHistory();
   }
 
   try {
@@ -131,7 +136,70 @@ document.addEventListener("DOMContentLoaded", async () => {
     showLeaderboardButton.addEventListener("click", () => {
       window.open("leaderboard.html", "_blank");
     });
-    document.getElementById("message").appendChild(showLeaderboardButton);
+    messageDiv.appendChild(showLeaderboardButton);
+  }
+
+  function showReport() {
+    const showReportButton = document.createElement("button");
+    showReportButton.textContent = "View Report";
+    showReportButton.classList.add("show-report-button");
+    showReportButton.addEventListener("click", () => {
+      window.open("report.html", "_blank");
+    });
+    messageDiv.appendChild(showReportButton);
+  }
+
+  function downloadExpense() {
+    const showDownloadButton = document.createElement("button");
+    showDownloadButton.textContent = "Download Expense";
+    showDownloadButton.classList.add("download-button");
+    showDownloadButton.addEventListener("click", async () => {
+      try {
+        token = localStorage.getItem("token");
+        const response = await axios.get(
+          "http://localhost:4000/expense/downloadExpense",
+          { headers: { Authorization: token } }
+        );
+        if (response.status === 200) {
+          const a = document.createElement("a");
+          a.href = response.data.fileURL;
+          a.download = "myexpense.csv";
+          a.click();
+        } else {
+          throw new Error(response.data.message);
+        }
+      } catch (err) {
+        console.error("error downloading Expense:", err);
+      }
+    });
+    messageDiv.appendChild(showDownloadButton);
+  }
+
+  function fetchDownloadHistory() {
+    const showDownloadHistoryButton = document.createElement("button");
+    showDownloadHistoryButton.textContent = "Download History";
+    showDownloadHistoryButton.classList.add("show-download-button");
+    showDownloadHistoryButton.addEventListener("click", async () => {
+      try {
+        token = localStorage.getItem("token");
+        const response = await axios.get(
+          "http://localhost:4000/expense/downloadHistory",
+          { headers: { Authorization: token } }
+        );
+        const downloadHistory = response.data;
+        downloadList.innerHTML = "";
+        downloadHistory.forEach((download, index) => {
+          const listItem = document.createElement("li");
+          listItem.innerHTML = `<span>${index + 1}.</span><a href="${
+            download.fileURL
+          }" target="_blank">${download.downloadDate}</a>`;
+          downloadList.appendChild(listItem);
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    });
+    messageDiv.appendChild(showDownloadHistoryButton);
   }
 
   buyPremiumButton.addEventListener("click", async (e) => {
@@ -159,6 +227,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("message").innerHTML = "You are premium user";
         localStorage.setItem("token", res.data.token);
         showLeaderboard();
+        showReport();
+        downloadExpense();
+        fetchDownloadHistory();
       },
     };
     const rzp1 = new Razorpay(options);

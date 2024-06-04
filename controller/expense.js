@@ -2,12 +2,48 @@ const path = require("path");
 const Expense = require("../model/expense");
 const User = require("../model/user");
 const sequelize = require("../util/database");
+const S3services = require("../services/S3services");
+const Download = require("../model/download");
 
-exports.getHomePage = (req, res, next) => {
+const getHomePage = (req, res, next) => {
   res.sendFile(path.join(__dirname, "../", "public", "views", "homePage.html"));
 };
 
-exports.getAllExpenses = async (req, res) => {
+const downloadExpense = async (req, res) => {
+  try {
+    const expenses = await Expense.findAll({ where: { userId: req.user.id } });
+    console.log("expenses", expenses);
+    const stringifiedExpenses = JSON.stringify(expenses);
+
+    const userId = req.user.id;
+    const fileName = `Expense${userId}/${new Date()}.txt`;
+    const fileURL = await S3services.uploadToS3(stringifiedExpenses, fileName);
+
+    const result = await Download.create({
+      userId: req.user.id,
+      fileURL: fileURL,
+      downloadDate: new Date(),
+    });
+    console.log("result", result);
+    res.status(200).json({ fileURL, success: true });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ fileURL: "", success: false, err: err });
+  }
+};
+const downloadDate = async (req, res) => {
+  try {
+    const downloadHistory = await Download.findAll({
+      where: { userId: req.user.id },
+      attributes: ["fileURL", "downloadDate"],
+    });
+    res.status(200).json(downloadHistory);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Error in fetching Data" });
+  }
+};
+const getAllExpenses = async (req, res) => {
   try {
     const expenses = await Expense.findAll({ where: { userId: req.user.id } });
     // console.log(expenses);
@@ -18,7 +54,7 @@ exports.getAllExpenses = async (req, res) => {
   }
 };
 
-exports.addExpense = async (req, res, next) => {
+const addExpense = async (req, res, next) => {
   const t = await sequelize.transaction();
 
   try {
@@ -50,7 +86,7 @@ exports.addExpense = async (req, res, next) => {
   }
 };
 
-exports.deleteExpense = async (req, res) => {
+const deleteExpense = async (req, res) => {
   const t = await sequelize.transaction();
   try {
     const expenseId = req.params.id;
@@ -82,4 +118,13 @@ exports.deleteExpense = async (req, res) => {
     console.log(error);
     res.status(500).json({ message: "Server Error" });
   }
+};
+
+module.exports = {
+  getAllExpenses,
+  downloadExpense,
+  downloadDate,
+  addExpense,
+  deleteExpense,
+  getHomePage,
 };

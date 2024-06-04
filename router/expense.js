@@ -17,4 +17,14 @@ router.delete(
   expenseController.deleteExpense
 );
 
+router.get(
+  "/downloadExpense",
+  userAuthentication,
+  expenseController.downloadExpense
+);
+router.get(
+  "/downloadHistory",
+  userAuthentication,
+  expenseController.downloadDate
+);
 module.exports = router;
