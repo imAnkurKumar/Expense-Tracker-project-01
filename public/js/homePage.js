@@ -7,6 +7,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   const prevPageBtn = document.getElementById("prevPageBtn");
   const nextPageBtn = document.getElementById("nextPageBtn");
   const currentPageDisplay = document.getElementById("currentPage");
+  const downloadHistoryContainer = document.getElementById(
+    "download-history-container"
+  );
 
   let token;
   let currentPage = 1;
@@ -39,6 +42,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   function showPremiumuserMember() {
     buyPremiumButton.style.visibility = "hidden";
     document.getElementById("message").innerHTML = "You are premium user";
+    downloadHistoryContainer.hidden = false;
     showLeaderboard();
     showReport();
     downloadExpense();
@@ -283,6 +287,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         buyPremiumButton.style.visibility = "hidden";
         document.getElementById("message").innerHTML = "You are premium user";
         localStorage.setItem("token", res.data.token);
+        downloadHistoryContainer.hidden = false;
         showLeaderboard();
         showReport();
         downloadExpense();
