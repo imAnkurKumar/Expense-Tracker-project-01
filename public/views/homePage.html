@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -44,6 +44,19 @@
       <div class="expense-list-container">
         <h2>Expense List</h2>
         <ul id="expense-list"></ul>
+        <div class="pagination-container">
+          <button id="prevPageBtn">Previous Page</button>
+          <span id="currentPage">Page 1</span>
+          <button id="nextPageBtn">Next Page</button>
+          <label for="expensesPerPage">Expenses Per Page:</label>
+          <select id="expensesPerPage" name="expensesPerPage">
+            <option value="5">5</option>
+            <option value="10" selected>10</option>
+            <option value="20">20</option>
+            <option value="30">30</option>
+            <option value="40">40</option>
+          </select>
+        </div>
       </div>
       <div id="download-history-container">
         <h2>Download History</h2>
@@ -56,6 +69,76 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
+    <script src="../js/homePage.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  </body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="../css/homePage.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Expense Tracker</h1>
+      <p>Track Your Expenses</p>
+    </header>
+    <div class="container">
+      <div class="expense-form-container">
+        <h2>Expense Form</h2>
+        <form id="expense-form">
+          <div class="form-group">
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" name="amount" required />
+          </div>
+          <div class="form-group">
+            <label for="description">Description:</label>
+            <input type="text" id="description" name="description" required />
+          </div>
+          <div class="form-group">
+            <label for="category">Category:</label>
+            <select id="category" name="category">
+              <option value="Food">Food</option>
+              <option value="Transport">Transport</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Utilities">Utilities</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <button type="submit">Add Expense</button>
+        </form>
+        <div id="message"></div>
+        <button id="buy-premium-button">Buy Premium</button>
+      </div>
+      <div class="expense-list-container">
+        <h2>Expense List</h2>
+        <ul id="expense-list"></ul>
+        <div class="pagination-container">
+          <button id="prevPageBtn">Previous Page</button>
+          <span id="currentPage">Page 1</span>
+          <button id="nextPageBtn">Next Page</button>
+          <label for="expensesPerPage">Expenses Per Page:</label>
+          <select id="expensesPerPage" name="expensesPerPage">
+            <option value="5">5</option>
+            <option value="10" selected>10</option>
+            <option value="20">20</option>
+            <option value="30">30</option>
+            <option value="40">40</option>
+          </select>
+        </div>
+      </div>
+      <div id="download-history-container" class="download-history-container">
+        <h2>Download History</h2>
+        <ul id="download-list"></ul>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.0/axios.min.js"></script>
     <script src="../js/homePage.js"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   </body>

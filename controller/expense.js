@@ -24,7 +24,7 @@ const downloadExpense = async (req, res) => {
       fileURL: fileURL,
       downloadDate: new Date(),
     });
-    console.log("result", result);
+    // console.log("result", result);
     res.status(200).json({ fileURL, success: true });
   } catch (err) {
     console.log(err);
@@ -45,9 +45,20 @@ const downloadDate = async (req, res) => {
 };
 const getAllExpenses = async (req, res) => {
   try {
-    const expenses = await Expense.findAll({ where: { userId: req.user.id } });
-    // console.log(expenses);
-    res.json(expenses);
+    const page = req.query.page || 1;
+    const limit = parseInt(req.query.perPage) || 5;
+    const offset = (page - 1) * limit;
+    const totalExpenses = await Expense.count({
+      where: { userId: req.user.id },
+    });
+    // console.log("totalExpense.. ", totalExpenses);
+    const expenses = await Expense.findAll({
+      where: { userId: req.user.id },
+      offset: offset,
+      limit: limit,
+    });
+    console.log(expenses);
+    res.json({ expenses, totalExpenses });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server Error" });
@@ -94,7 +105,7 @@ const deleteExpense = async (req, res) => {
       where: { id: expenseId, userId: req.user.id }, // Check both ID and userId
     });
     if (!expense) {
-      t.rollback();
+      await t.rollback();
       return res.status(404).json({ message: "Expense not found" });
     }
     const deletedAmount = expense.amount;
