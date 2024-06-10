@@ -8,7 +8,7 @@ exports.purchaseMembership = async (req, res) => {
       key_id: process.env.RAZORPAY_KEY_ID,
       key_secret: process.env.RAZORPAY_KEY_SECRET,
     });
-    const amount = 5000;
+    const amount = 500000;
     rzp.orders.create({ amount, currency: "INR" }, (err, order) => {
       if (err) {
         throw new Error(JSON.stringify(err));
@@ -29,7 +29,6 @@ exports.purchaseMembership = async (req, res) => {
 };
 
 exports.updateTransactionstatus = async (req, res) => {
-  console.log(req.body);
   try {
     const userId = req.user.id;
     const { payment_id, order_id } = req.body;

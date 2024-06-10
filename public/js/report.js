@@ -1,15 +1,16 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  const dailyTable = document.getElementById("dailyTable");
   const showDailyButton = document.getElementById("showDailyReport");
   const tbodyDaily = document.getElementById("tbodyDailyId");
   const tfootDaily = document.getElementById("tfootDailyId");
 
-  const monthlyTable = document.getElementById("monthlyTable");
+  const showWeeklyButton = document.getElementById("showWeeklyReport");
+  const tbodyWeekly = document.getElementById("tbodyWeeklyId");
+  const tfootWeekly = document.getElementById("tfootWeeklyId");
+
   const showMonthlyButton = document.getElementById("showMonthlyReport");
   const tbodyMonthly = document.getElementById("tbodyMonthlyId");
   const tfootMonthly = document.getElementById("tfootMonthlyId");
 
-  const yearlyTable = document.getElementById("yearlyTable");
   const showYearlyButton = document.getElementById("showYearlyReport");
   const tbodyYearly = document.getElementById("tbodyId");
   const tfootYearly = document.getElementById("tfootYearlyId");
@@ -25,9 +26,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         { date: selectedDate },
         { headers: { Authorization: token } }
       );
-      // console.log(response.data);
-
-      // Clear existing table data
       tbodyDaily.innerHTML = "";
 
       // Update the table with the received data
@@ -35,7 +33,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         totalAmount += expense.amount;
         const row = document.createElement("tr");
         row.innerHTML = `
-         <td>${expense.createdAt}</td>
          <td>${expense.category}</td>
          <td>${expense.description}</td>
          <td>${expense.amount}</td>
@@ -47,13 +44,50 @@ document.addEventListener("DOMContentLoaded", async () => {
       tfootDaily.innerHTML = `
        <tr>
          <td></td>
-         <td></td>
          <td>Total</td>
          <td id="dailyTotalAmount">${totalAmount}</td>
        </tr>
      `;
     } catch (err) {
       console.log("Getting errror>", err);
+    }
+  });
+
+  showWeeklyButton.addEventListener("click", async (e) => {
+    e.preventDefault();
+    try {
+      const selectedWeek = document.getElementById("week").value;
+      let token = localStorage.getItem("token");
+      let totalAmount = 0;
+      const response = await axios.post(
+        "http://localhost:4000/reports/weeklyReports",
+        { week: selectedWeek },
+        { headers: { Authorization: token } }
+      );
+      tbodyWeekly.innerHTML = "";
+
+      // Update the table with the received data
+      response.data.forEach((expense) => {
+        totalAmount += expense.amount;
+        const row = document.createElement("tr");
+        row.innerHTML = `       
+         <td>${expense.category}</td>
+         <td>${expense.description}</td>
+         <td>${expense.amount}</td>
+       `;
+        tbodyWeekly.appendChild(row);
+      });
+
+      // Update the total amount in the footer
+      tfootWeekly.innerHTML = `
+       <tr>
+         <td></td>
+         <td>Total</td>
+         <td id="weeklyTotalAmount">${totalAmount}</td>
+       </tr>
+     `;
+    } catch (err) {
+      console.log("Getting error>", err);
     }
   });
 
@@ -67,7 +101,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         { month: selectedMonth },
         { headers: { Authorization: token } }
       );
-      console.log(response.data);
+      // console.log(response.data);
 
       // Clear existing table data
       tbodyMonthly.innerHTML = "";
@@ -76,9 +110,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       let totalAmount = 0;
       response.data.forEach((expense) => {
         totalAmount += expense.amount;
+        const createdAt = new Date(expense.createdAt);
+        const formattedDate = createdAt.toLocaleDateString();
+        const formattedTime = createdAt.toLocaleTimeString();
         const row = document.createElement("tr");
         row.innerHTML = `
-        <td>${expense.createdAt}</td>
+        <td>${formattedDate} ${formattedTime}</td>
         <td>${expense.category}</td>
         <td>${expense.description}</td>
         <td>${expense.amount}</td>

@@ -28,7 +28,6 @@
         <table class="report-table">
           <thead>
             <tr>
-              <th>Date</th>
               <th>Category</th>
               <th>Description</th>
               <th>Amount</th>
@@ -37,6 +36,36 @@
           <!-- daily table body -->
           <tbody id="tbodyDailyId"></tbody>
           <tfoot id="tfootDailyId">
+            <tr></tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <!-- Weekly Table -->
+    <div class="container" id="weeklyTable">
+      <!-- Weekly table Form -->
+      <div class="report-section">
+        <h3>WEEKLY REPORTS</h3>
+        <form>
+          <label for="week"> Select Week</label>
+          <input type="week" id="week" required />
+          <button type="submit" id="showWeeklyReport">Show</button>
+        </form>
+      </div>
+
+      <!-- Weekly table -->
+      <div class="report-section">
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Description</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyWeeklyId"></tbody>
+          <tfoot id="tfootWeeklyId">
             <tr></tr>
           </tfoot>
         </table>

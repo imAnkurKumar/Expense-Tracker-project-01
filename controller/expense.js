@@ -12,7 +12,6 @@ const getHomePage = (req, res, next) => {
 const downloadExpense = async (req, res) => {
   try {
     const expenses = await Expense.findAll({ where: { userId: req.user.id } });
-    console.log("expenses", expenses);
     const stringifiedExpenses = JSON.stringify(expenses);
 
     const userId = req.user.id;
@@ -24,7 +23,6 @@ const downloadExpense = async (req, res) => {
       fileURL: fileURL,
       downloadDate: new Date(),
     });
-    // console.log("result", result);
     res.status(200).json({ fileURL, success: true });
   } catch (err) {
     console.log(err);
@@ -51,13 +49,11 @@ const getAllExpenses = async (req, res) => {
     const totalExpenses = await Expense.count({
       where: { userId: req.user.id },
     });
-    // console.log("totalExpense.. ", totalExpenses);
     const expenses = await Expense.findAll({
       where: { userId: req.user.id },
       offset: offset,
       limit: limit,
     });
-    console.log(expenses);
     res.json({ expenses, totalExpenses });
   } catch (error) {
     console.error(error);
@@ -80,8 +76,7 @@ const addExpense = async (req, res, next) => {
       { transaction: t }
     );
     const totalExpense = Number(req.user.totalExpenses) + Number(amount);
-    console.log("totalExpense", totalExpense);
-    console.log("result", result);
+
     const updateUser = await User.update(
       { totalExpenses: totalExpense },
       { where: { id: req.user.id }, transaction: t }

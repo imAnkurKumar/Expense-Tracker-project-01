@@ -21,7 +21,6 @@ const sendEmail = async (req, res) => {
       return res.status(500).json({ message: "User not found" });
     }
 
-    console.log("recepientEmail-->>", recepientEmail);
     const resetRequest = await ResetPassword.create({
       id: requestId,
       active: true,
@@ -47,7 +46,7 @@ const sendEmail = async (req, res) => {
         requestId: requestId,
       },
     });
-    console.log("emailResponse", emailResponse);
+   
     return res.status(200).json({
       message:
         "Link for reset the password is successfully send on your Mail Id!",
@@ -70,7 +69,6 @@ const resetPasswordPage = async (req, res) => {
 const updatePassword = async (req, res) => {
   try {
     const requestId = req.headers.referer.split("/");
-    console.log(requestId);
     const password = req.body.password;
 
     const checkResetRequest = await ResetPassword.findAll({

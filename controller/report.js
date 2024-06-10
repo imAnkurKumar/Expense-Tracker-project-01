@@ -9,7 +9,6 @@ const getReportPage = (req, res) => {
 const dailyReports = async (req, res) => {
   try {
     const dateFromFrontend = req.body.date;
-    console.log("Date From Frontend", dateFromFrontend);
 
     const satrtDate = new Date(`${dateFromFrontend} 00:00:00`);
     const endDate = new Date(`${dateFromFrontend} 23:59:59`);
@@ -33,17 +32,49 @@ const dailyReports = async (req, res) => {
   }
 };
 
+const weeklyReports = async (req, res) => {
+  try {
+    const weekFromFrontend = req.body.week;
+
+    const [year, week] = weekFromFrontend.split("-W");
+    const date = new Date(year, 0, 1 + (week - 1) * 7);
+    const startDate = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate()
+    );
+    const endDate = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate() + 6
+    );
+
+    const expenses = await Expense.findAll({
+      where: {
+        createdAt: {
+          [Op.between]: [startDate, endDate],
+        },
+        userId: req.user.id,
+      },
+    });
+    if (!expenses || expenses.length === 0) {
+      return res.status(401).json({ msg: "No expenses found" });
+    }
+    res.status(201).json(expenses);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("server error");
+  }
+};
+
 const monthlyReports = async (req, res) => {
   try {
     const monthFromFrontend = req.body.month;
-    console.log("Month From Frontend", monthFromFrontend);
 
     const startDate = new Date(`${monthFromFrontend}-01 00:00:00`);
     const year = startDate.getFullYear();
     const nextMonth = startDate.getMonth() + 1;
     const endDate = new Date(year, nextMonth, 0, 23, 59, 59);
-
-    console.log(endDate);
 
     const expenses = await Expense.findAll({
       where: {
@@ -67,16 +98,8 @@ const yearlyReports = async (req, res) => {
   try {
     const yearFromFrontend = req.body.year;
 
-    console.log("Year From Frontend", yearFromFrontend);
-
     const startDate = new Date(`${yearFromFrontend}-01-01 00:00:00`);
-    console.log("startDate", startDate);
-
-    // const endDate = new Date(
-    //   new Date(startDate.getFullYear() + 1, 0, 0, 23, 59, 59)
-    // );
     const endDate = new Date(yearFromFrontend, 11, 31, 23, 59, 59);
-    console.log("endDate", endDate);
 
     const expenses = await Expense.findAll({
       where: {
@@ -121,4 +144,10 @@ const yearlyReports = async (req, res) => {
   }
 };
 
-module.exports = { getReportPage, dailyReports, monthlyReports, yearlyReports };
+module.exports = {
+  getReportPage,
+  dailyReports,
+  weeklyReports,
+  monthlyReports,
+  yearlyReports,
+};

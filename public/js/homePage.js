@@ -242,18 +242,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     showDownloadHistoryButton.classList.add("show-download-button");
     showDownloadHistoryButton.addEventListener("click", async () => {
       try {
-        token = localStorage.getItem("token");
+        const token = localStorage.getItem("token");
         const response = await axios.get(
           "http://localhost:4000/expense/downloadHistory",
           { headers: { Authorization: token } }
         );
+        console.log("download history", response);
         const downloadHistory = response.data;
         downloadList.innerHTML = "";
         downloadHistory.forEach((download, index) => {
+          const downloadDate = new Date(download.downloadDate);
+          const formattedDate = downloadDate.toLocaleDateString();
+          const formattedTime = downloadDate.toLocaleTimeString();
           const listItem = document.createElement("li");
-          listItem.innerHTML = `<span>${index + 1}.</span><a href="${
+          listItem.innerHTML = `<span>${index + 1}. </span><a href="${
             download.fileURL
-          }" target="_blank">${download.downloadDate}</a>`;
+          }" target="_blank">${formattedDate} ${formattedTime}</a>`;
           downloadList.appendChild(listItem);
         });
       } catch (err) {

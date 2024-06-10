@@ -3,6 +3,9 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const helmet = require("helmet");
+const morgan = require("morgan");
+const fs = require("fs");
 dotenv.config();
 
 const app = express();
@@ -22,7 +25,14 @@ const ResetPassword = require("./model/resetPassword");
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(helmet());
 app.use(cors());
+
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, "access.log"),
+  { flags: "a" }
+);
+app.use(morgan("combined", { stream: accessLogStream }));
 
 app.use("/", userRouter);
 app.use("/user", userRouter);
@@ -33,6 +43,10 @@ app.use("/premium", premiumFeatures);
 app.use("/password", resetPassword);
 app.use("/reports", reportRouter);
 
+app.use((req, res) => {
+  res.status(404).json({ message: "Route not found" });
+});
+
 User.hasMany(Expense);
 Expense.belongsTo(User);
 
@@ -41,9 +55,12 @@ Order.belongsTo(User);
 
 User.hasMany(ResetPassword);
 ResetPassword.belongsTo(User);
+
 sequelize
   .sync()
   .then((result) => {
-    app.listen(4000);
+    app.listen(process.env.PORT, () => {
+      console.log(`Server is running on port ${process.env.PORT}`);
+    });
   })
   .catch((err) => console.log(err));

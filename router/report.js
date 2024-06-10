@@ -9,6 +9,12 @@ router.get("/getReportPage", reportController.getReportPage);
 router.post("/dailyReports", userAuthentication, reportController.dailyReports);
 
 router.post(
+  "/weeklyReports",
+  userAuthentication,
+  reportController.weeklyReports
+);
+
+router.post(
   "/monthlyReports",
   userAuthentication,
   reportController.monthlyReports
@@ -19,4 +25,5 @@ router.post(
   userAuthentication,
   reportController.yearlyReports
 );
+
 module.exports = router;

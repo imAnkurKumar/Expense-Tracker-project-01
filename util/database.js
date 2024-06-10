@@ -2,7 +2,7 @@ const Sequelize = require("sequelize");
 const sequelize = new Sequelize(
   "expense-tracker-full-stack",
   "root",
-  "T#9758@QLPH",
+  process.env.DATABASE_PASSWORD,
   {
     dialect: "mysql",
     host: "localhost",
