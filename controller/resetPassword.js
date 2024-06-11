@@ -46,7 +46,7 @@ const sendEmail = async (req, res) => {
         requestId: requestId,
       },
     });
-   
+
     return res.status(200).json({
       message:
         "Link for reset the password is successfully send on your Mail Id!",
@@ -59,9 +59,7 @@ const resetPasswordPage = async (req, res) => {
   try {
     res
       .status(200)
-      .sendFile(
-        path.join(__dirname, "../", "public", "views", "resetPassword.html")
-      );
+      .sendFile(path.join(__dirname, "../", "views", "resetPassword.html"));
   } catch (error) {
     console.log(error);
   }

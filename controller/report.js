@@ -3,7 +3,7 @@ const Expense = require("../model/expense");
 const { Op } = require("sequelize");
 
 const getReportPage = (req, res) => {
-  res.sendFile(path.join(__dirname, "../", "public", "views", "report.html"));
+  res.sendFile(path.join(__dirname, "../", "views", "report.html"));
 };
 
 const dailyReports = async (req, res) => {
