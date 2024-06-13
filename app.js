@@ -65,11 +65,16 @@ Order.belongsTo(User);
 User.hasMany(ResetPassword);
 ResetPassword.belongsTo(User);
 
-sequelize
-  .sync()
-  .then((result) => {
-    app.listen(process.env.PORT, () => {
-      console.log(`Server is running on port ${process.env.PORT}`);
+async function initiate() {
+  try {
+    await sequelize.sync();
+    app.listen(PORT, () => {
+      {
+        console.log(`Server is running on port ${process.env.PORT}`);
+      }
     });
-  })
-  .catch((err) => console.log(err));
+  } catch (err) {
+    console.log(err);
+  }
+}
+initiate();

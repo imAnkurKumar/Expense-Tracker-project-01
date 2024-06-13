@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     token = localStorage.getItem("token");
     try {
       const response = await axios.get(
-        `http://localhost:4000/expense/getAllExpenses?page=${page}&perPage=${perPage}`,
+        `/expense/getAllExpenses?page=${page}&perPage=${perPage}`,
         { headers: { Authorization: token } }
       );
       const { expenses, totalExpenses } = response.data;
@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:4000/expense/addExpenses",
+        "/expense/addExpenses",
         {
           amount,
           description,
@@ -163,10 +163,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       const expenseId = expenseItem.dataset.expenseId;
 
       try {
-        await axios.delete(
-          `http://localhost:4000/expense/deleteExpense/${expenseId}`,
-          { headers: { Authorization: token } }
-        );
+        await axios.delete(`/expense/deleteExpense/${expenseId}`, {
+          headers: { Authorization: token },
+        });
         expenseItem.remove();
         alert("Expense deleted successfully");
       } catch (error) {
@@ -217,10 +216,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     showDownloadButton.addEventListener("click", async () => {
       try {
         token = localStorage.getItem("token");
-        const response = await axios.get(
-          "http://localhost:4000/expense/downloadExpense",
-          { headers: { Authorization: token } }
-        );
+        const response = await axios.get("/expense/downloadExpense", {
+          headers: { Authorization: token },
+        });
         if (response.status === 200) {
           const a = document.createElement("a");
           a.href = response.data.fileURL;
@@ -243,10 +241,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     showDownloadHistoryButton.addEventListener("click", async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get(
-          "http://localhost:4000/expense/downloadHistory",
-          { headers: { Authorization: token } }
-        );
+        const response = await axios.get("/expense/downloadHistory", {
+          headers: { Authorization: token },
+        });
         console.log("download history", response);
         const downloadHistory = response.data;
         downloadList.innerHTML = "";
@@ -270,17 +267,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   buyPremiumButton.addEventListener("click", async (e) => {
     e.preventDefault();
     token = localStorage.getItem("token");
-    const response = await axios.get(
-      "http://localhost:4000/purchase/premiumMembership",
-      { headers: { Authorization: token } }
-    );
+    const response = await axios.get("/purchase/premiumMembership", {
+      headers: { Authorization: token },
+    });
     // console.log(response);
     var options = {
       key: response.data.key_id,
       order_id: response.data.order.id,
       handler: async function (response) {
         const res = await axios.post(
-          "http://localhost:4000/purchase/updateTransactionstatus",
+          "/purchase/updateTransactionstatus",
           {
             order_id: options.order_id,
             payment_id: response.razorpay_payment_id,

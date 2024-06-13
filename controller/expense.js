@@ -6,7 +6,7 @@ const S3services = require("../services/S3services");
 const Download = require("../model/download");
 
 const getHomePage = (req, res, next) => {
-  res.sendFile(path.join(__dirname, "../", "views", "homePage.html"));
+  res.sendFile(path.join(__dirname, "../", "public", "views", "homePage.html"));
 };
 
 const downloadExpense = async (req, res) => {

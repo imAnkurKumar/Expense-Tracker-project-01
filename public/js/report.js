@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       let token = localStorage.getItem("token");
       let totalAmount = 0;
       const response = await axios.post(
-        "http://localhost:4000/reports/dailyReports",
+        "/reports/dailyReports",
         { date: selectedDate },
         { headers: { Authorization: token } }
       );
@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       let token = localStorage.getItem("token");
       let totalAmount = 0;
       const response = await axios.post(
-        "http://localhost:4000/reports/weeklyReports",
+        "/reports/weeklyReports",
         { week: selectedWeek },
         { headers: { Authorization: token } }
       );
@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const selectedMonth = document.getElementById("month").value;
       let token = localStorage.getItem("token");
       const response = await axios.post(
-        "http://localhost:4000/reports/monthlyReports",
+        "/reports/monthlyReports",
         { month: selectedMonth },
         { headers: { Authorization: token } }
       );
@@ -143,7 +143,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const selectedYear = document.getElementById("year-input").value;
       let token = localStorage.getItem("token");
       const response = await axios.post(
-        "http://localhost:4000/reports/yearlyReports",
+        "/reports/yearlyReports",
         { year: selectedYear },
         { headers: { Authorization: token } }
       );

@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
       }
       const res = await axios.post(
-        "http://localhost:4000/password/resetPassword",
+        "/password/resetPassword",
         {
           password: newPassword,
         }

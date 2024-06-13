@@ -41,7 +41,7 @@ const sendEmail = async (req, res) => {
       subject: "Reset Your Password",
       textContent: "Link Below",
       htmlContent: `<h3>Hi! We got the request from you for reset the password. Here is the link below >>></h3>
-      <a href="http://localhost:4000/password/resetPasswordPage/{{params.requestId}}"> Click Here</a>`,
+      <a href="${process.env.WEBSITE}/password/resetPasswordPage/{{params.requestId}}"> Click Here</a>`,
       params: {
         requestId: requestId,
       },
@@ -59,7 +59,9 @@ const resetPasswordPage = async (req, res) => {
   try {
     res
       .status(200)
-      .sendFile(path.join(__dirname, "../", "views", "resetPassword.html"));
+      .sendFile(
+        path.join(__dirname, "../", "public", "views", "resetPassword.html")
+      );
   } catch (error) {
     console.log(error);
   }

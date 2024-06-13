@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
 
-        const response = await axios.post("http://localhost:4000/user/login", {
+        const response = await axios.post("/user/login", {
           email,
           password,
         });
