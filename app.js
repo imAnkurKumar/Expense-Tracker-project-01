@@ -7,7 +7,7 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const fs = require("fs");
 dotenv.config();
-
+const PORT = process.env.PORT;
 const app = express();
 const userRouter = require("./router/user");
 const expenseRouter = require("./router/expense");
@@ -70,7 +70,7 @@ async function initiate() {
     await sequelize.sync();
     app.listen(PORT, () => {
       {
-        console.log(`Server is running on port ${process.env.PORT}`);
+        console.log(`Server is running on port ${PORT}`);
       }
     });
   } catch (err) {
