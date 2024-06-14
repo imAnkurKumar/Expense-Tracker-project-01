@@ -26,15 +26,15 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 // app.use(helmet());
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "cdnjs.cloudflare.com"],
-      styleSrc: ["'self'", "cdnjs.cloudflare.com"],
-    },
-  })
-);
+// app.use(
+//   helmet.contentSecurityPolicy({
+//     directives: {
+//       defaultSrc: ["'self'"],
+//       scriptSrc: ["'self'", "cdnjs.cloudflare.com"],
+//       styleSrc: ["'self'", "cdnjs.cloudflare.com"],
+//     },
+//   })
+// );
 app.use(cors());
 
 const accessLogStream = fs.createWriteStream(
