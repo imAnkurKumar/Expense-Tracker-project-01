@@ -35,6 +35,16 @@ app.use(bodyParser.json());
 //     },
 //   })
 // );
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "https://cdnjs.cloudflare.com"],
+      styleSrc: ["'self'", "https://cdnjs.cloudflare.com"],
+      formAction: ["'self'", "https://13.201.3.39:4000"],
+    },
+  })
+);
 app.use(cors());
 
 const accessLogStream = fs.createWriteStream(
