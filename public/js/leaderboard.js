@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       let token = localStorage.getItem("token");
 
       const userLeaderboardAarray = await axios.get(
-        "/premium/showLeaderboard",
+        "http://13.201.3.39/premium/showLeaderboard",
         { headers: { Authorization: token } }
       );
       const leaderboardContent = document.getElementById("leaderboard-content");
